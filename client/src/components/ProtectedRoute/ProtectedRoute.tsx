@@ -5,7 +5,7 @@ import type { AuthStatus } from '../../interfaces/AuthStatus';
 
 interface ProtectedRouteProps {
   authStatus: AuthStatus;
-  children: React.JSX.Element;
+  children: React.ReactNode;
 }
 
 function ProtectedRoute({ authStatus, children }: ProtectedRouteProps): React.JSX.Element | null {
@@ -18,7 +18,7 @@ function ProtectedRoute({ authStatus, children }: ProtectedRouteProps): React.JS
     return <Navigate to="/signin" replace />;
   }
 
-  return children;
+  return <>{children}</>;
 }
 
 export default ProtectedRoute;

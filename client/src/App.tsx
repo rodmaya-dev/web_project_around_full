@@ -33,13 +33,18 @@ function App() {
   const [userEmail, setUserEmail] = useState<string>('');
   const [infoTooltipStatus, setInfoTooltipStatus] = useState<InfoTooltipStatus | null>(null);
 
-  // Se ejecuta una sola vez al montar: decide si hay sesión.
-  // TEMPORAL (Paso 6): aquí se usará validateSession para comprobar el token guardado.
+  // Se ejecuta una sola vez al montar: restaura la sesión si hay un token guardado.
+  // Mientras responde /users/me, authStatus sigue en 'checking' y ProtectedRoute
+  // no redirige, así que un usuario con token válido nunca pasa por /signin.
   useEffect(() => {
-    (async () => {
-      const token = localStorage.getItem(TOKEN_KEY);
-      setAuthStatus(token ? 'authenticated' : 'guest');
-    })();
+    const token = localStorage.getItem(TOKEN_KEY);
+
+    if (!token) {
+      setAuthStatus('guest');
+      return;
+    }
+
+    validateSession(token);
   }, []);
 
   // Los datos de la API propia solo se piden cuando hay sesión
@@ -175,7 +180,7 @@ function App() {
     }
   }
 
-  // /signin y /signup no van envueltas en ProtectedRoute (lo pide la lista):
+  // /signin y /signup no van envueltas en ProtectedRoute:
   // aquí se resuelve el caso inverso, un usuario con sesión no debe verlas.
   function renderGuestPage(page: React.JSX.Element): React.JSX.Element | null {
     if (authStatus === 'checking') {
@@ -202,14 +207,16 @@ function App() {
             path="/"
             element={
               <ProtectedRoute authStatus={authStatus}>
-                <Main
-                  cards={cards}
-                  popup={popup}
-                  handleOpenPopup={handleOpenPopup}
-                  handleClosePopup={handleClosePopup}
-                  handleCardLike={handleCardLike}
-                  handleCardDelete={handleCardDelete}
-                />
+                {currentUser ? (
+                  <Main
+                    cards={cards}
+                    popup={popup}
+                    handleOpenPopup={handleOpenPopup}
+                    handleClosePopup={handleClosePopup}
+                    handleCardLike={handleCardLike}
+                    handleCardDelete={handleCardDelete}
+                  />
+                ) : null}
               </ProtectedRoute>
             }
           />
