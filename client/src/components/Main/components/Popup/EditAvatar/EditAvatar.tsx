@@ -31,6 +31,8 @@ function EditAvatar(): React.JSX.Element {
             placeholder="Enlace a la imagen"
             required
             type="url"
+            pattern="https?://.+"
+            title="El enlace debe empezar con http:// o https://"
             ref={avatarRef}
             onChange={handleChange}
         />

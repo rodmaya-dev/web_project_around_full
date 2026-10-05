@@ -1,5 +1,3 @@
-// client/src/components/Main/components/Popup/NewCard/NewCard.tsx
-
 import { useContext } from 'react';
 
 import CurrentUserContext from '../../../../../contexts/CurrentUserContext';
@@ -38,6 +36,7 @@ function NewCard(): React.JSX.Element {
             name="link"
             placeholder="Enlace a la imagen"
             type="url"
+            pattern="https?://.+"
             required
             value={values.link}
             onChange={handleChange}

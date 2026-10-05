@@ -1,5 +1,3 @@
-// client/src/App.tsx
-
 import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
@@ -47,7 +45,9 @@ function App() {
     validateSession(token);
   }, []);
 
-  // Los datos de la API propia solo se piden cuando hay sesión
+  // Perfil y tarjetas de la API propia: se piden una sola vez por sesión,
+  // cuando authStatus pasa a 'authenticated'. Un visitante no debe lanzar
+  // estas peticiones, y el arreglo de dependencias evita repetirlas en cada render.
   useEffect(() => {
     if (authStatus !== 'authenticated') {
       return;
