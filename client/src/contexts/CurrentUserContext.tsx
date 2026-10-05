@@ -1,3 +1,5 @@
+//client/src/contexts/CurrentUserContext.tsx
+
 import { createContext } from 'react';
 import type { CurrentUserContextType } from '../interfaces/CurrentUserContextType';
 

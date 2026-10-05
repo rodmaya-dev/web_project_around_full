@@ -1,4 +1,4 @@
-//Header.tsx
+// client/src/components/Header/Header.tsx
 
 import logo from '../../images/logo.svg';
 
