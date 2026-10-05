@@ -1,7 +1,7 @@
 // client/src/App.tsx
 
 import { useEffect, useState } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
 import Header from './components/Header/Header';
 import Main from './components/Main/Main';
@@ -9,6 +9,7 @@ import Footer from './components/Footer/Footer';
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import InfoTooltip from './components/InfoTooltip/InfoTooltip';
 
 import api from './utils/api';
 import CurrentUserContext from './contexts/CurrentUserContext';
@@ -17,12 +18,17 @@ import type { UserData, ProfileFormData } from './interfaces/UserData';
 import type { CardData, CardFormData } from './interfaces/CardData';
 import type { ModalData } from './interfaces/ModalData';
 import type { AuthStatus } from './interfaces/AuthStatus';
+import type { InfoTooltipStatus } from './interfaces/InfoTooltipStatus';
 
 function App() {
+  const navigate = useNavigate();
+
   const [currentUser, setCurrentUser] = useState<UserData | null>(null);
   const [cards, setCards] = useState<CardData[]>([]);
   const [popup, setPopup] = useState<ModalData | null>(null);
   const [authStatus, setAuthStatus] = useState<AuthStatus>('checking');
+  const [userEmail, setUserEmail] = useState<string>('');
+  const [infoTooltipStatus, setInfoTooltipStatus] = useState<InfoTooltipStatus | null>(null);
 
   // Se ejecuta una sola vez al montar: decide si hay sesión.
   // Paso 5/6: aquí se validará el token contra /users/me de la API de autenticación.
@@ -59,6 +65,30 @@ function App() {
 
   function handleClosePopup() {
     setPopup(null);
+  }
+
+  function handleCloseInfoTooltip(): void {
+    setInfoTooltipStatus(null);
+  }
+
+  // TEMPORAL (Paso 5): aquí irán las llamadas a auth.ts.
+  // Por ahora simulan los dos resultados para poder revisar el InfoTooltip.
+  async function handleRegister(): Promise<void> {
+    setInfoTooltipStatus('success');
+    navigate('/signin');
+  }
+
+  async function handleLogin(): Promise<void> {
+    setInfoTooltipStatus('error');
+  }
+
+  function handleSignOut(): void {
+    localStorage.removeItem('jwt');
+    setPopup(null);
+    setCurrentUser(null);
+    setCards([]);
+    setUserEmail('');
+    setAuthStatus('guest');
   }
 
   async function handleCardLike(card: CardData): Promise<void> {
@@ -109,7 +139,7 @@ function App() {
     }
   }
 
-  // /signin y /signup no van envueltas en ProtectedRoute (lo pide la lista):
+  // /signin y /signup no van envueltas en ProtectedRoute:
   // aquí se resuelve el caso inverso, un usuario con sesión no debe verlas.
   function renderGuestPage(page: React.JSX.Element): React.JSX.Element | null {
     if (authStatus === 'checking') {
@@ -126,7 +156,11 @@ function App() {
   return (
     <CurrentUserContext.Provider value={{ currentUser, handleUpdateUser, handleUpdateAvatar, handleAddPlaceSubmit }}>
       <div className='page__content'>
-        <Header />
+        <Header
+          authStatus={authStatus}
+          email={userEmail}
+          handleSignOut={handleSignOut}
+        />
         <Routes>
           <Route
             path="/"
@@ -143,12 +177,13 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/signin" element={renderGuestPage(<Login />)} />
-          <Route path="/signup" element={renderGuestPage(<Register />)} />
+          <Route path="/signin" element={renderGuestPage(<Login handleLogin={handleLogin} />)} />
+          <Route path="/signup" element={renderGuestPage(<Register handleRegister={handleRegister} />)} />
           {/* Cualquier otra ruta cae en "/", que a su vez protege según la sesión */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         <Footer />
+        <InfoTooltip status={infoTooltipStatus} onClose={handleCloseInfoTooltip} />
       </div>
     </CurrentUserContext.Provider>
   );

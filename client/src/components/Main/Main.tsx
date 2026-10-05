@@ -1,3 +1,5 @@
+// client/src/components/Main/Main.tsx
+
 import { useContext } from "react";
 
 import type { ModalData } from "../../interfaces/ModalData";

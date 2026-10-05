@@ -149,6 +149,27 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* ====== INFOTOOLTIP (escritorio) ====== */
+
+.popup__content_type_tooltip {
+  min-height: 330px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding: 60px 36px;
+  text-align: center;
+}
+
+.popup__tooltip-icon {
+  flex-shrink: 0;
+  width: 120px;
+  height: 120px;
+}
+
+/* ====== MÓVIL ====== */
+
 @media screen and (max-width: 544px) {
   .popup {
     bottom: 112px;
@@ -187,5 +208,22 @@ button:disabled {
   .popup__content_content_image {
     max-width: 75vw;
     padding: 0;
+  }
+}
+
+/* ====== INFOTOOLTIP (móvil) ====== */
+/* Va al final a propósito: debe ganar a las reglas móviles de .popup y .popup__content */
+
+@media screen and (max-width: 544px) {
+  /* El bottom: 112px de .popup dejaría una franja sin overlay */
+  .popup_type_tooltip {
+    bottom: 0;
+  }
+
+  .popup__content_type_tooltip {
+    min-height: 308px;
+    gap: 40px;
+    padding: 50px 22px;
+    margin-top: 0;
   }
 }

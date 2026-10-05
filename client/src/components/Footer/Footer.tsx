@@ -1,7 +1,7 @@
 function Footer (): React.JSX.Element {
     return (
         <footer className="footer page__section">
-            <p className="footer__copyright">© 2025 Around The U.S.</p>
+            <p className="footer__copyright">© 2026 Around The U.S.</p>
         </footer>
     )
 }

@@ -1,3 +1,5 @@
+// client/src/components/Main/components/Popup/EditProfile/EditProfile.tsx
+
 import { useContext } from 'react';
 
 import CurrentUserContext from '../../../../../contexts/CurrentUserContext';

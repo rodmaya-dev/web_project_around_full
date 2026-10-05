@@ -1,3 +1,5 @@
+// client/src/components/Main/components/Popup/NewCard/NewCard.tsx
+
 import { useContext } from 'react';
 
 import CurrentUserContext from '../../../../../contexts/CurrentUserContext';

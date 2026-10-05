@@ -1,4 +1,4 @@
-//Popup.tsx
+// client/src/components/Main/components/Popup/Popup.tsx
 
 type PopupProps = {
   title?: string;
