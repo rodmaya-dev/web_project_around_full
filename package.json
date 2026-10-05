@@ -1,0 +1,10 @@
+{
+  "name": "web_project_around_full",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev:client": "npm run dev --prefix client",
+    "dev:server": "npm run dev --prefix server",
+    "install:all": "npm install --prefix client && npm install --prefix server"
+  }
+}
