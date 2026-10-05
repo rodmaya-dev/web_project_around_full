@@ -12,6 +12,7 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import InfoTooltip from './components/InfoTooltip/InfoTooltip';
 
 import api from './utils/api';
+import * as auth from './utils/auth';
 import CurrentUserContext from './contexts/CurrentUserContext';
 
 import type { UserData, ProfileFormData } from './interfaces/UserData';
@@ -19,6 +20,8 @@ import type { CardData, CardFormData } from './interfaces/CardData';
 import type { ModalData } from './interfaces/ModalData';
 import type { AuthStatus } from './interfaces/AuthStatus';
 import type { InfoTooltipStatus } from './interfaces/InfoTooltipStatus';
+
+const TOKEN_KEY = 'jwt';
 
 function App() {
   const navigate = useNavigate();
@@ -31,10 +34,10 @@ function App() {
   const [infoTooltipStatus, setInfoTooltipStatus] = useState<InfoTooltipStatus | null>(null);
 
   // Se ejecuta una sola vez al montar: decide si hay sesión.
-  // Paso 5/6: aquí se validará el token contra /users/me de la API de autenticación.
+  // TEMPORAL (Paso 6): aquí se usará validateSession para comprobar el token guardado.
   useEffect(() => {
     (async () => {
-      const token = localStorage.getItem('jwt');
+      const token = localStorage.getItem(TOKEN_KEY);
       setAuthStatus(token ? 'authenticated' : 'guest');
     })();
   }, []);
@@ -71,19 +74,52 @@ function App() {
     setInfoTooltipStatus(null);
   }
 
-  // TEMPORAL (Paso 5): aquí irán las llamadas a auth.ts.
-  // Por ahora simulan los dos resultados para poder revisar el InfoTooltip.
-  async function handleRegister(): Promise<void> {
-    setInfoTooltipStatus('success');
-    navigate('/signin');
+  // Comprueba el token con la API de autenticación y actualiza el estado de sesión.
+  // Si el token no sirve, lo borra: así nunca queda guardado un token inválido.
+  async function validateSession(token: string): Promise<boolean> {
+    try {
+      const user = await auth.checkToken(token);
+      setUserEmail(user.email);
+      setAuthStatus('authenticated');
+      return true;
+    } catch (error) {
+      console.error(error);
+      localStorage.removeItem(TOKEN_KEY);
+      setAuthStatus('guest');
+      return false;
+    }
   }
 
-  async function handleLogin(): Promise<void> {
-    setInfoTooltipStatus('error');
+  async function handleRegister(email: string, password: string): Promise<void> {
+    try {
+      await auth.register(email, password);
+      setInfoTooltipStatus('success');
+      navigate('/signin');
+    } catch (error) {
+      console.error(error);
+      setInfoTooltipStatus('error');
+    }
+  }
+
+  async function handleLogin(email: string, password: string): Promise<void> {
+    try {
+      const token = await auth.login(email, password);
+      localStorage.setItem(TOKEN_KEY, token);
+
+      const isSessionValid = await validateSession(token);
+      if (isSessionValid) {
+        navigate('/');
+      } else {
+        setInfoTooltipStatus('error');
+      }
+    } catch (error) {
+      console.error(error);
+      setInfoTooltipStatus('error');
+    }
   }
 
   function handleSignOut(): void {
-    localStorage.removeItem('jwt');
+    localStorage.removeItem(TOKEN_KEY);
     setPopup(null);
     setCurrentUser(null);
     setCards([]);
@@ -139,7 +175,7 @@ function App() {
     }
   }
 
-  // /signin y /signup no van envueltas en ProtectedRoute:
+  // /signin y /signup no van envueltas en ProtectedRoute (lo pide la lista):
   // aquí se resuelve el caso inverso, un usuario con sesión no debe verlas.
   function renderGuestPage(page: React.JSX.Element): React.JSX.Element | null {
     if (authStatus === 'checking') {
