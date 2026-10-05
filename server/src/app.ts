@@ -1,10 +1,15 @@
+// server/src/app.ts
+
 import express from "express";
 import mongoose from "mongoose";
+import cors from "cors";
 import mainRouter from "./routes/index.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 const PORT = 3001;
+
+app.use(cors({ origin: "http://localhost:3000" }));
 
 mongoose.connect("mongodb://localhost:27017/aroundb") // aroundb es la base de datos que usaremos
   .then(() => console.log("Connected to MongoDB"))

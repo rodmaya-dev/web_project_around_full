@@ -1,3 +1,5 @@
+// client/src/utils/api.ts
+
 import type { UserData, ProfileFormData } from '../interfaces/UserData';
 import type { CardData, CardFormData } from '../interfaces/CardData';
 
@@ -81,9 +83,8 @@ export class Api {
 }
 
 const api = new Api({
-  baseUrl: 'https://around-api.es.tripleten-services.com/v1', //import.meta.env.VITE_API_BASE_URL,
+  baseUrl: 'http://localhost:3001',
   headers: {
-    authorization: 'd084ae1b-7690-4535-a6ba-80f2ca6a37a3', //import.meta.env.VITE_API_TOKEN,
     'Content-Type': 'application/json'
   }
 });
