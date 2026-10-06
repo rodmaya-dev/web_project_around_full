@@ -6,17 +6,25 @@ Este repositorio reúne en un solo proyecto el front end (React) y la API (Expre
 
 ## Capturas de pantalla
 
-| Registro | Inicio de sesión |
-| --- | --- |
-| ![Registro](./screenshots/register.png) | ![Inicio de sesión](./screenshots/login.png) |
+### Registro
 
-| Página principal | Registro exitoso |
-| --- | --- |
-| ![Página principal](./screenshots/home.png) | ![Registro exitoso](./screenshots/tooltip-success.png) |
+![Registro](./screenshots/register.png)
 
-| Error al iniciar sesión |
-| --- |
-| ![Error](./screenshots/tooltip-error.png) |
+### Inicio de sesión
+
+![Inicio de sesión](./screenshots/login.png)
+
+### Página principal
+
+![Página principal](./screenshots/home.png)
+
+### Registro exitoso
+
+![Registro exitoso](./screenshots/tooltip-success.png)
+
+### Error al iniciar sesión
+
+![Error al iniciar sesión](./screenshots/tooltip-error.png)
 
 ## Funcionalidad
 
