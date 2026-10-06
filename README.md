@@ -144,4 +144,4 @@ La autenticación de la API propia es provisional: el servidor identifica al usu
 
 **Rodrigo Maya**
 
-Proyecto final - Sprint 12 (React + TypeScript) | TripleTen Bootcamp
+Proyecto final - Sprint 15 (Autenticación del lado del cliente) | TripleTen Bootcamp
