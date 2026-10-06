@@ -139,3 +139,9 @@ El registro, el inicio de sesión y la comprobación del token usan la API de au
 ## Estado del proyecto
 
 La autenticación de la API propia es provisional: el servidor identifica al usuario mediante un middleware temporal. En el siguiente sprint se implementará la autenticación segura en el back end con tokens JWT.
+
+## 👨‍💻 Autor
+
+**Rodrigo Maya**
+
+Proyecto final - Sprint 12 (React + TypeScript) | TripleTen Bootcamp
