@@ -1,5 +1,3 @@
-// client/src/components/ProtectedRoute/ProtectedRoute.tsx
-
 import { Navigate } from 'react-router-dom';
 import type { AuthStatus } from '../../types/AuthStatus';
 
