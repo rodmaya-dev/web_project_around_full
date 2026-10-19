@@ -4,28 +4,6 @@ Aplicación web full-stack para compartir lugares memorables mediante tarjetas c
 
 Este repositorio reúne en un solo proyecto el front end (React) y la API (Express) desarrollados en los sprints anteriores del bootcamp.
 
-## Capturas de pantalla
-
-### Registro
-
-![Registro](./screenshots/register.png)
-
-### Inicio de sesión
-
-![Inicio de sesión](./screenshots/login.png)
-
-### Página principal
-
-![Página principal](./screenshots/home.png)
-
-### Registro exitoso
-
-![Registro exitoso](./screenshots/tooltip-success.png)
-
-### Error al iniciar sesión
-
-![Error al iniciar sesión](./screenshots/tooltip-error.png)
-
 ## Funcionalidad
 
 - **Registro e inicio de sesión** de usuarios mediante la API de autenticación de TripleTen.
@@ -76,7 +54,6 @@ web_project_around_full/
 │       └── index.css
 ├── server/               # API de Express
 │   └── src/
-├── screenshots/          # Capturas de pantalla del README
 ├── .gitignore
 ├── package.json          # Scripts de la raíz
 └── README.md
