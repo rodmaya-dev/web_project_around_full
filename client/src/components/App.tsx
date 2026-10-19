@@ -27,22 +27,21 @@ function App() {
   const [currentUser, setCurrentUser] = useState<UserData | null>(null);
   const [cards, setCards] = useState<CardData[]>([]);
   const [popup, setPopup] = useState<ModalData | null>(null);
-  const [authStatus, setAuthStatus] = useState<AuthStatus>('checking');
+  //const [authStatus, setAuthStatus] = useState<AuthStatus>('checking');
+  const [authStatus, setAuthStatus] = useState<AuthStatus>(() =>
+    localStorage.getItem(TOKEN_KEY) ? 'checking' : 'guest'
+  );
   const [userEmail, setUserEmail] = useState<string>('');
   const [infoTooltipStatus, setInfoTooltipStatus] = useState<InfoTooltipStatus | null>(null);
 
-  // Se ejecuta una sola vez al montar: restaura la sesión si hay un token guardado.
-  // Mientras responde /users/me, authStatus sigue en 'checking' y ProtectedRoute
-  // no redirige, así que un usuario con token válido nunca pasa por /signin.
+  // Restaura la sesión si hay un token guardado. El estado inicial ya es 'checking'
+  // en ese caso, así que ProtectedRoute espera la respuesta de /users/me sin redirigir.
   useEffect(() => {
     const token = localStorage.getItem(TOKEN_KEY);
 
-    if (!token) {
-      setAuthStatus('guest');
-      return;
+    if (token) {
+      validateSession(token);
     }
-
-    validateSession(token);
   }, []);
 
   // Perfil y tarjetas de la API propia: se piden una sola vez por sesión,
