@@ -70,7 +70,7 @@ web_project_around_full/
 │       ├── contexts/     # CurrentUserContext
 │       ├── hooks/        # Hooks personalizados
 │       ├── images/
-│       ├── interfaces/   # Tipos de TypeScript
+│       ├── types/        # Tipos de TypeScript
 │       ├── utils/        # api.ts y auth.ts
 │       ├── main.tsx
 │       └── index.css
