@@ -1,7 +1,5 @@
-// client/src/utils/api.ts
-
-import type { UserData, ProfileFormData } from '../interfaces/UserData';
-import type { CardData, CardFormData } from '../interfaces/CardData';
+import type { UserData, ProfileFormData } from '../types/UserData';
+import type { CardData, CardFormData } from '../types/CardData';
 
 interface ApiConfig {
   baseUrl: string;

@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 
 import logo from '../../images/logo.svg';
-import type { AuthStatus } from '../../interfaces/AuthStatus';
+import type { AuthStatus } from '../../types/AuthStatus';
 
 type HeaderProps = {
   authStatus: AuthStatus;

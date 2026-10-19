@@ -1,5 +1,3 @@
-// client/src/components/Main/components/Popup/Popup.tsx
-
 type PopupProps = {
   title?: string;
   children: React.ReactNode;

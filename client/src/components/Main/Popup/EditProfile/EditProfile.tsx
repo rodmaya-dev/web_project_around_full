@@ -2,8 +2,8 @@
 
 import { useContext } from 'react';
 
-import CurrentUserContext from '../../../../../contexts/CurrentUserContext';
-import { useFormValidation } from '../../../../../hooks/useFormValidation';
+import CurrentUserContext from '../../../../contexts/CurrentUserContext';
+import { useFormValidation } from '../../../../hooks/useFormValidation';
 
 function EditProfile(): React.JSX.Element {
     const { currentUser, handleUpdateUser } = useContext(CurrentUserContext);

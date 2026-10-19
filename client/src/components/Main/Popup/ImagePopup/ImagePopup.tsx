@@ -1,4 +1,4 @@
-import type { CardData } from "../../../../../interfaces/CardData";
+import type { CardData } from "../../../../types/CardData";
 
 type CardProps = {
   card: CardData;

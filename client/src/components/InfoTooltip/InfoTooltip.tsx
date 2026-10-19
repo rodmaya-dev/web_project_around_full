@@ -1,6 +1,6 @@
-import successIcon from '../../images/success.svg';
-import failIcon from '../../images/fail.svg';
-import type { InfoTooltipStatus } from '../../interfaces/InfoTooltipStatus';
+import successIcon from '../../images/tooltip-success.svg';
+import failIcon from '../../images/tooltip-fail.svg';
+import type { InfoTooltipStatus } from '../../types/InfoTooltipStatus';
 
 type InfoTooltipProps = {
   status: InfoTooltipStatus | null;

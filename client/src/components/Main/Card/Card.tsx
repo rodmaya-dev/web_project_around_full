@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 
-import type { CardData } from '../../../../interfaces/CardData';
-import type { ModalData } from '../../../../interfaces/ModalData';
-import CurrentUserContext from '../../../../contexts/CurrentUserContext';
+import type { CardData } from './../../../types/CardData';
+import type { ModalData } from '../../../types/ModalData';
+import CurrentUserContext from '../../../contexts/CurrentUserContext';
 import ImagePopup from '../Popup/ImagePopup/ImagePopup';
 
 type CardProps = {

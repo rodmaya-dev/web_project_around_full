@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
-import Header from './components/Header/Header';
-import Main from './components/Main/Main';
-import Footer from './components/Footer/Footer';
-import Login from './components/Login/Login';
-import Register from './components/Register/Register';
-import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
-import InfoTooltip from './components/InfoTooltip/InfoTooltip';
+import Header from './Header/Header';
+import Main from './Main/Main';
+import Footer from './Footer/Footer';
+import Login from './Login/Login';
+import Register from './Register/Register';
+import ProtectedRoute from './ProtectedRoute/ProtectedRoute';
+import InfoTooltip from './InfoTooltip/InfoTooltip';
 
-import api from './utils/api';
-import * as auth from './utils/auth';
-import CurrentUserContext from './contexts/CurrentUserContext';
+import api from '../utils/api';
+import * as auth from '../utils/auth';
+import CurrentUserContext from '../contexts/CurrentUserContext';
 
-import type { UserData, ProfileFormData } from './interfaces/UserData';
-import type { CardData, CardFormData } from './interfaces/CardData';
-import type { ModalData } from './interfaces/ModalData';
-import type { AuthStatus } from './interfaces/AuthStatus';
-import type { InfoTooltipStatus } from './interfaces/InfoTooltipStatus';
+import type { UserData, ProfileFormData } from '../types/UserData';
+import type { CardData, CardFormData } from '../types/CardData';
+import type { ModalData } from '../types/ModalData';
+import type { AuthStatus } from '../types/AuthStatus';
+import type { InfoTooltipStatus } from '../types/InfoTooltipStatus';
 
 const TOKEN_KEY = 'jwt';
 

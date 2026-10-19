@@ -1,0 +1,30 @@
+.popup__content_type_tooltip {
+  min-height: 330px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding: 60px 36px;
+  text-align: center;
+}
+
+.popup__tooltip-icon {
+  flex-shrink: 0;
+  width: 120px;
+  height: 120px;
+}
+
+@media screen and (max-width: 544px) {
+  /* El bottom: 112px de .popup dejaría una franja sin overlay */
+  .popup_type_tooltip {
+    bottom: 0;
+  }
+
+  .popup__content_type_tooltip {
+    min-height: 308px;
+    gap: 40px;
+    padding: 50px 22px;
+    margin-top: 0;
+  }
+}

@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
-import CurrentUserContext from '../../../../../contexts/CurrentUserContext';
-import { useFormValidation } from '../../../../../hooks/useFormValidation';
+import CurrentUserContext from '../../../../contexts/CurrentUserContext';
+import { useFormValidation } from '../../../../hooks/useFormValidation';
 
 function NewCard(): React.JSX.Element {
     const { handleAddPlaceSubmit } = useContext(CurrentUserContext);

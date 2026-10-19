@@ -1,16 +1,14 @@
-// client/src/components/Main/Main.tsx
-
 import { useContext } from "react";
 
-import type { ModalData } from "../../interfaces/ModalData";
-import type { CardData } from "../../interfaces/CardData";
+import type { ModalData } from "../../types/ModalData";
+import type { CardData } from "../../types/CardData";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 
-import Popup from "./components/Popup/Popup";
-import NewCard from "./components/Popup/NewCard/NewCard";
-import EditProfile from "./components/Popup/EditProfile/EditProfile";
-import EditAvatar from "./components/Popup/EditAvatar/EditAvatar";
-import Card from "./components/Card/Card";
+import Popup from "./Popup/Popup";
+import NewCard from "./Popup/NewCard/NewCard";
+import EditProfile from "./Popup/EditProfile/EditProfile";
+import EditAvatar from "./Popup/EditAvatar/EditAvatar";
+import Card from "./Card/Card";
 
 import avatarPlaceholder from "../../images/avatar.jpg";
 
