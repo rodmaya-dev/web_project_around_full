@@ -14,7 +14,7 @@ mongoose.connect("mongodb:127.0.0.1:27017/aroundb") // aroundb es la base de dat
   .catch((err) => console.error("MongoDB connection error:", err));
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+//app.use(express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   req.user = {
