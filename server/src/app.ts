@@ -4,6 +4,7 @@ import cors from "cors";
 import mainRouter from "./routes/index.js";
 import { createUser } from "./controllers/users.js";
 import { login } from "./controllers/auth.js";
+import { auth } from "./middleware/auth.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
@@ -22,13 +23,8 @@ app.use(express.urlencoded({ extended: true }));
 app.post("/signup", createUser);
 app.post("/signin", login);
 
-// Temporal: se elimina en el paso 6, cuando el middleware de autenticación lo reemplace.
-app.use((req, res, next) => {
-  req.user = {
-    _id: "6aa5e8a445520fdee610bc43",
-  };
-  next();
-});
+// Todo lo que se monte desde aquí hacia abajo exige un token válido.
+app.use(auth);
 
 app.use(mainRouter);
 
