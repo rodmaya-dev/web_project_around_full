@@ -7,14 +7,14 @@ import { errorHandler } from "./middleware/errorHandler.js";
 const app = express();
 const PORT = 3001;
 
-app.use(cors({ origin: "http://127.0.0.1:3000" }));
+app.use(cors({ origin: "http://localhost:3000" }));
 
-mongoose.connect("mongodb:127.0.0.1:27017/aroundb") // aroundb es la base de datos que usaremos
+mongoose.connect("mongodb://localhost:27017/aroundb") // aroundb es la base de datos que usaremos
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
 app.use(express.json());
-//app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   req.user = {
