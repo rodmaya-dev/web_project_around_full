@@ -1,5 +1,16 @@
 import type { Request, Response } from "express";
+import bcrypt from "bcryptjs";
 import User from "../models/user.js";
+
+const MIN_PASSWORD_LENGTH = 8;
+const SALT_ROUNDS = 10;
+const MONGO_DUPLICATE_KEY_CODE = 11000;
+
+const isDuplicateKeyError = (error: unknown): boolean =>
+  typeof error === "object" &&
+  error !== null &&
+  "code" in error &&
+  error.code === MONGO_DUPLICATE_KEY_CODE;
 
 export const getUsers = async (_req: Request, res: Response) => {
   const users = await User.find({});
@@ -19,9 +30,49 @@ export const getUserById = async (req: Request, res: Response) => {
 };
 
 export const createUser = async (req: Request, res: Response) => {
-  const { name, about, avatar } = req.body;
-  const user = await User.create({ name, about, avatar });
-  res.status(201).send(user);
+  const { name, about, avatar, email, password } = req.body ?? {};
+
+  // Se valida antes de tocar la base de datos y antes de hashear.
+  if (typeof email !== "string" || typeof password !== "string" || !email || !password) {
+    throw Object.assign(new Error("El correo y la contraseña son obligatorios"), {
+      statusCode: 400,
+    });
+  }
+
+  if (password.length < MIN_PASSWORD_LENGTH) {
+    throw Object.assign(
+      new Error(`La contraseña debe tener al menos ${MIN_PASSWORD_LENGTH} caracteres`),
+      { statusCode: 400 },
+    );
+  }
+
+  const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
+  try {
+    const user = await User.create({
+      name,
+      about,
+      avatar,
+      email,
+      password: hashedPassword,
+    });
+
+    // Se nombran los campos para que el hash nunca salga en la respuesta.
+    res.status(201).send({
+      _id: user._id,
+      email: user.email,
+      name: user.name,
+      about: user.about,
+      avatar: user.avatar,
+    });
+  } catch (error) {
+    if (isDuplicateKeyError(error)) {
+      throw Object.assign(new Error("Ya existe un usuario con ese correo"), {
+        statusCode: 409,
+      });
+    }
+    throw error;
+  }
 };
 
 export const getUserMe = async (req: Request, res: Response) => {
@@ -67,7 +118,6 @@ export const updateProfile = async (req: Request, res: Response) => {
   }
 
   res.send(user);
-
 };
 
 export const updateAvatar = async (req: Request, res: Response) => {
@@ -80,7 +130,7 @@ export const updateAvatar = async (req: Request, res: Response) => {
     });
   }
 
-    const user = await User.findByIdAndUpdate(
+  const user = await User.findByIdAndUpdate(
     userId,
     { avatar },
     { new: true, runValidators: true },

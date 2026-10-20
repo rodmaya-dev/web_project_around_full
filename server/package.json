@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/rodmaya-dev/web_project_around_express#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "mongoose": "^9.9.4"
