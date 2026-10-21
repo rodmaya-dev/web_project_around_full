@@ -1,6 +1,7 @@
 import type { UserData, ProfileFormData } from '../types/UserData';
 import type { CardData, CardFormData } from '../types/CardData';
 import { TOKEN_KEY } from './auth';
+import { API_URL } from './config';
 
 interface ApiConfig {
   baseUrl: string;
@@ -89,7 +90,7 @@ export class Api {
 }
 
 const api = new Api({
-  baseUrl: 'http://localhost:3001'
+  baseUrl: API_URL
 });
 
 export default api;

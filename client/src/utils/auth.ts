@@ -1,6 +1,5 @@
 import type { UserData } from '../types/UserData';
-
-const BASE_URL = 'http://localhost:3001';
+import { API_URL } from './config';
 
 export const TOKEN_KEY = 'jwt';
 
@@ -17,7 +16,7 @@ async function checkResponse<T>(res: Response): Promise<T> {
 }
 
 async function postCredentials<T>(path: string, email: string, password: string): Promise<T> {
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await fetch(`${API_URL}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
