@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 import { JWT_SECRET } from "../config.js";
+import { toOwnUser } from "../utils/userResponse.js";
 
 const TOKEN_EXPIRATION = "7d";
 
@@ -42,14 +43,5 @@ export const login = async (req: Request, res: Response) => {
     expiresIn: TOKEN_EXPIRATION,
   });
 
-  res.send({
-    token,
-    user: {
-      _id: user._id,
-      email: user.email,
-      name: user.name,
-      about: user.about,
-      avatar: user.avatar,
-    },
-  });
+  res.send({ token, user: toOwnUser(user) });
 };
