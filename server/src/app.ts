@@ -5,6 +5,7 @@ import mainRouter from "./routes/index.js";
 import { createUser } from "./controllers/users.js";
 import { login } from "./controllers/auth.js";
 import { auth } from "./middleware/auth.js";
+import { signinLimiter, signupLimiter } from "./middleware/rateLimiters.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
@@ -19,9 +20,10 @@ mongoose.connect("mongodb://localhost:27017/aroundb") // aroundb es la base de d
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Rutas abiertas: entregan el token, así que van antes de cualquier protección.
-app.post("/signup", createUser);
-app.post("/signin", login);
+// Rutas abiertas: entregan el token, así que van antes de la autenticación.
+// Cada una lleva su propio limitador, que se ejecuta antes que el controlador.
+app.post("/signup", signupLimiter, createUser);
+app.post("/signin", signinLimiter, login);
 
 // Todo lo que se monte desde aquí hacia abajo exige un token válido.
 app.use(auth);
