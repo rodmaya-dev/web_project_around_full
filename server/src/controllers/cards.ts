@@ -113,7 +113,7 @@ export const likeCard = async (req: Request, res: Response) => {
   const card = await Card.findOneAndUpdate(
     { _id: cardId, owner: userId },
     { $addToSet: { likes: userId } },
-    { new: true },
+    { returnDocument: "after" },
   );
 
   // Solo ocurre si la tarjeta se borró justo entre la comprobación y el update.
@@ -134,7 +134,7 @@ export const dislikeCard = async (req: Request, res: Response) => {
   const card = await Card.findOneAndUpdate(
     { _id: cardId, owner: userId },
     { $pull: { likes: userId } },
-    { new: true },
+    { returnDocument: "after" },
   );
 
   if (!card) {

@@ -110,7 +110,7 @@ export const updateProfile = async (req: Request, res: Response) => {
   const user = await User.findByIdAndUpdate(
     userId, //  ID
     { name, about }, // cambios
-    { new: true, runValidators: true }, // opciones
+    { returnDocument: "after", runValidators: true }, // opciones
   );
 
   if (!user) {
@@ -135,7 +135,7 @@ export const updateAvatar = async (req: Request, res: Response) => {
   const user = await User.findByIdAndUpdate(
     userId,
     { avatar },
-    { new: true, runValidators: true },
+    { returnDocument: "after", runValidators: true },
   );
 
   if (!user) {
