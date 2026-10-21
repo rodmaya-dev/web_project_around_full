@@ -1,20 +1,12 @@
-const BASE_URL = 'https://se-register-api.en.tripleten-services.com/v1';
+import type { UserData } from '../types/UserData';
 
-export interface AuthUser {
-  _id: string;
-  email: string;
-}
+const BASE_URL = 'http://localhost:3001';
 
-interface RegisterResponse {
-  data: AuthUser;
-}
+export const TOKEN_KEY = 'jwt';
 
 interface LoginResponse {
   token: string;
-}
-
-interface CheckTokenResponse {
-  data: AuthUser;
+  user: UserData;
 }
 
 async function checkResponse<T>(res: Response): Promise<T> {
@@ -24,35 +16,20 @@ async function checkResponse<T>(res: Response): Promise<T> {
   throw new Error(`Error: ${res.status}`);
 }
 
-export async function register(email: string, password: string): Promise<AuthUser> {
-  const res = await fetch(`${BASE_URL}/signup`, {
+async function postCredentials<T>(path: string, email: string, password: string): Promise<T> {
+  const res = await fetch(`${BASE_URL}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
   });
-  const { data } = await checkResponse<RegisterResponse>(res);
-  return data;
+  return checkResponse<T>(res);
+}
+
+export function register(email: string, password: string): Promise<UserData> {
+  return postCredentials<UserData>('/signup', email, password);
 }
 
 export async function login(email: string, password: string): Promise<string> {
-  const res = await fetch(`${BASE_URL}/signin`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password }),
-  });
-  const { token } = await checkResponse<LoginResponse>(res);
+  const { token } = await postCredentials<LoginResponse>('/signin', email, password);
   return token;
-}
-
-// Único endpoint que lleva el encabezado Authorization
-export async function checkToken(token: string): Promise<AuthUser> {
-  const res = await fetch(`${BASE_URL}/users/me`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const { data } = await checkResponse<CheckTokenResponse>(res);
-  return data;
 }
