@@ -3,6 +3,7 @@ export interface UserData {
   name: string;
   about: string;
   avatar: string;
+  email: string;
 }
 
 // Datos que viajan del formulario "Editar perfil" hacia la API

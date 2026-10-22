@@ -32,6 +32,9 @@ const cardSchema = new mongoose.Schema({
   },
 });
 
+// Sirve de golpe el filtro por dueño y el orden por fecha de cada listado.
+cardSchema.index({ owner: 1, createdAt: -1 });
+
 const Card = mongoose.model("Card", cardSchema);
 
 export default Card;

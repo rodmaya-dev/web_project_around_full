@@ -10,7 +10,7 @@ import ProtectedRoute from './ProtectedRoute/ProtectedRoute';
 import InfoTooltip from './InfoTooltip/InfoTooltip';
 
 import api from '../utils/api';
-import * as auth from '../utils/auth';
+import { TOKEN_KEY, login, register } from '../utils/auth';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 
 import type { UserData, ProfileFormData } from '../types/UserData';
@@ -19,34 +19,27 @@ import type { ModalData } from '../types/ModalData';
 import type { AuthStatus } from '../types/AuthStatus';
 import type { InfoTooltipStatus } from '../types/InfoTooltipStatus';
 
-const TOKEN_KEY = 'jwt';
-
 function App() {
   const navigate = useNavigate();
 
   const [currentUser, setCurrentUser] = useState<UserData | null>(null);
   const [cards, setCards] = useState<CardData[]>([]);
   const [popup, setPopup] = useState<ModalData | null>(null);
-  //const [authStatus, setAuthStatus] = useState<AuthStatus>('checking');
   const [authStatus, setAuthStatus] = useState<AuthStatus>(() =>
     localStorage.getItem(TOKEN_KEY) ? 'checking' : 'guest'
   );
-  const [userEmail, setUserEmail] = useState<string>('');
   const [infoTooltipStatus, setInfoTooltipStatus] = useState<InfoTooltipStatus | null>(null);
 
   // Restaura la sesión si hay un token guardado. El estado inicial ya es 'checking'
   // en ese caso, así que ProtectedRoute espera la respuesta de /users/me sin redirigir.
   useEffect(() => {
-    const token = localStorage.getItem(TOKEN_KEY);
-
-    if (token) {
-      validateSession(token);
+    if (localStorage.getItem(TOKEN_KEY)) {
+      validateSession();
     }
   }, []);
 
-  // Perfil y tarjetas de la API propia: se piden una sola vez por sesión,
-  // cuando authStatus pasa a 'authenticated'. Un visitante no debe lanzar
-  // estas peticiones, y el arreglo de dependencias evita repetirlas en cada render.
+  // Las tarjetas se piden una sola vez por sesión, cuando authStatus pasa a
+  // 'authenticated'. El perfil ya lo trajo validateSession.
   useEffect(() => {
     if (authStatus !== 'authenticated') {
       return;
@@ -54,12 +47,7 @@ function App() {
 
     (async () => {
       try {
-        const [userData, initialCards] = await Promise.all([
-          api.getUserInfo(),
-          api.getInitialCards()
-        ]);
-        setCurrentUser(userData);
-        setCards(initialCards);
+        setCards(await api.getInitialCards());
       } catch (error) {
         console.error(error);
       }
@@ -78,12 +66,12 @@ function App() {
     setInfoTooltipStatus(null);
   }
 
-  // Comprueba el token con la API de autenticación y actualiza el estado de sesión.
-  // Si el token no sirve, lo borra: así nunca queda guardado un token inválido.
-  async function validateSession(token: string): Promise<boolean> {
+  // GET /users/me valida el token y trae el perfil completo en una sola petición.
+  // Si el token no sirve, se borra: así nunca queda guardado un token inválido.
+  async function validateSession(): Promise<boolean> {
     try {
-      const user = await auth.checkToken(token);
-      setUserEmail(user.email);
+      const user = await api.getUserInfo();
+      setCurrentUser(user);
       setAuthStatus('authenticated');
       return true;
     } catch (error) {
@@ -96,7 +84,7 @@ function App() {
 
   async function handleRegister(email: string, password: string): Promise<void> {
     try {
-      await auth.register(email, password);
+      await register(email, password);
       setInfoTooltipStatus('success');
       navigate('/signin');
     } catch (error) {
@@ -107,10 +95,10 @@ function App() {
 
   async function handleLogin(email: string, password: string): Promise<void> {
     try {
-      const token = await auth.login(email, password);
+      const token = await login(email, password);
       localStorage.setItem(TOKEN_KEY, token);
 
-      const isSessionValid = await validateSession(token);
+      const isSessionValid = await validateSession();
       if (isSessionValid) {
         navigate('/');
       } else {
@@ -127,7 +115,6 @@ function App() {
     setPopup(null);
     setCurrentUser(null);
     setCards([]);
-    setUserEmail('');
     setAuthStatus('guest');
   }
 
@@ -198,7 +185,7 @@ function App() {
       <div className='page__content'>
         <Header
           authStatus={authStatus}
-          email={userEmail}
+          email={currentUser?.email ?? ''}
           handleSignOut={handleSignOut}
         />
         <Routes>
