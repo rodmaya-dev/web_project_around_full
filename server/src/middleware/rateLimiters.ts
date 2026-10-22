@@ -1,4 +1,4 @@
-import rateLimit from "express-rate-limit";
+import { rateLimit } from "express-rate-limit";
 import type { Request, Response, NextFunction } from "express";
 
 const MINUTE_IN_MS = 60 * 1000;
