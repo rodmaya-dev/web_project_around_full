@@ -1,3 +1,4 @@
+import dns from 'node:dns';
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -8,6 +9,12 @@ import { auth } from "./middleware/auth.js";
 import { signinLimiter, signupLimiter } from "./middleware/rateLimiters.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { CLIENT_ORIGIN, MONGODB_URI, PORT } from "./config.js";
+
+// Solo en desarrollo: el resolver de algunas redes domésticas rechaza consultas SRV.
+// En Vercel se usa el DNS de la plataforma.
+if (process.env.NODE_ENV !== 'production') {
+  dns.setServers(['8.8.8.8', '8.8.4.4']);
+}
 
 // Tope de conexiones abiertas por instancia. Cada instancia de la plataforma abre
 // su propio grupo, y el plan gratuito de Atlas admite un número limitado en total.
