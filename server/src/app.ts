@@ -9,6 +9,7 @@ import { auth } from "./middleware/auth.js";
 import { signinLimiter, signupLimiter } from "./middleware/rateLimiters.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { CLIENT_ORIGIN, MONGODB_URI, PORT } from "./config.js";
+import { inspect } from "node:util";
 
 // Solo en desarrollo: el resolver de algunas redes domésticas rechaza consultas SRV.
 // En Vercel se usa el DNS de la plataforma.
@@ -20,6 +21,11 @@ if (process.env.NODE_ENV !== 'production') {
 // su propio grupo, y el plan gratuito de Atlas admite un número limitado en total.
 const MONGO_MAX_POOL_SIZE = 10;
 
+// Falla rápido si no hay conexión: por debajo de los 10 s tras los que Mongoose
+// abandona las consultas en espera ("buffering timed out"), para que el motivo
+// real llegue al log en lugar de ese mensaje genérico.
+const MONGO_SERVER_SELECTION_TIMEOUT_MS = 5000;
+
 const app = express();
 
 // Detrás del proxy de la plataforma, req.ip sería la IP del proxy y todos los
@@ -29,9 +35,12 @@ app.set("trust proxy", 1);
 
 app.use(cors({ origin: CLIENT_ORIGIN }));
 
-mongoose.connect(MONGODB_URI, { maxPoolSize: MONGO_MAX_POOL_SIZE })
+mongoose.connect(MONGODB_URI, {
+  maxPoolSize: MONGO_MAX_POOL_SIZE,
+  serverSelectionTimeoutMS: MONGO_SERVER_SELECTION_TIMEOUT_MS,
+})
   .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+  .catch((err) => console.error("MongoDB connection error:", inspect(err, { depth: 6 })));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
