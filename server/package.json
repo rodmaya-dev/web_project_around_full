@@ -1,7 +1,7 @@
 {
-  "name": "web_project_around_express",
+  "name": "web_project_around_full_server",
   "version": "1.0.0",
-  "description": "",
+  "description": "API REST de Around The U.S. (Express, Mongoose y JWT)",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
@@ -11,7 +11,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rodmaya-dev/web_project_around_express.git"
+    "url": "git+https://github.com/rodmaya-dev/web_project_around_full.git",
+    "directory": "server"
   },
   "keywords": [],
   "author": {
@@ -22,11 +23,11 @@
   "license": "ISC",
   "type": "module",
   "bugs": {
-    "url": "https://github.com/rodmaya-dev/web_project_around_express/issues"
+    "url": "https://github.com/rodmaya-dev/web_project_around_full/issues"
   },
-  "homepage": "https://github.com/rodmaya-dev/web_project_around_express#readme",
+  "homepage": "https://github.com/rodmaya-dev/web_project_around_full#readme",
   "dependencies": {
-    "bcryptjs": "^3.0.3",
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^18.0.8",
     "express": "^5.2.1",
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
