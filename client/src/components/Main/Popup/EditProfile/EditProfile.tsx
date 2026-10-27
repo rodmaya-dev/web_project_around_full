@@ -21,7 +21,7 @@ function EditProfile(): React.JSX.Element {
         <input
             className={`popup__input popup__input_type_name ${errors.name ? 'form__input_type_error' : ''}`}
             minLength={2}
-            maxLength={40}
+            maxLength={30}
             id="name"
             name="name"
             placeholder="Nombre"
@@ -36,7 +36,7 @@ function EditProfile(): React.JSX.Element {
         <input
             className={`popup__input popup__input_type_description ${errors.description ? 'form__input_type_error' : ''}`}
             minLength={2}
-            maxLength={200}
+            maxLength={30}
             id="description"
             name="description"
             placeholder="Acerca de mí"

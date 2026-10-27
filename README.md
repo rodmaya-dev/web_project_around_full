@@ -42,7 +42,7 @@ El proyecto sigue los tres bloques del sprint: autenticación en el back end, se
 
 ### 1. Autenticación con JWT y contraseñas protegidas
 
-- **Registro (`POST /signup`):** valida que lleguen `email` y `password` como texto, exige un mínimo de **8 caracteres** *antes* de hashear (la regla se aplica a la contraseña original, no al hash) y guarda la contraseña con **bcrypt** (`bcryptjs`, 10 rondas de sal). Un correo repetido responde **409** gracias al índice único (`unique: true`, error `11000` de MongoDB manejado en el controlador).
+- **Registro (`POST /signup`):** valida que lleguen `email` y `password` como texto, exige un mínimo de **8 caracteres** *antes* de hashear (la regla se aplica a la contraseña original, no al hash) y guarda la contraseña con **bcrypt** (`bcrypt`, 10 rondas de sal). Un correo repetido responde **409** gracias al índice único (`unique: true`, error `11000` de MongoDB manejado en el controlador).
 - **Inicio de sesión (`POST /signin`):** busca al usuario, compara con `bcrypt.compare` y entrega un **JWT** (HS256, expira en 7 días) cuyo payload solo lleva el `_id`. El payload está codificado, no cifrado, por eso no contiene datos sensibles.
 - **Mismo mensaje para "correo inexistente" y "contraseña incorrecta"** (401) y comparación contra un hash de relleno cuando el usuario no existe, para no revelar qué correos están registrados ni por el mensaje ni por el tiempo de respuesta.
 - **Middleware `auth`:** exige `Authorization: Bearer <token>`, verifica firma y expiración con `jwt.verify` (algoritmo fijado a HS256) y deja la identidad en `req.user`. Se monta después de `/signup` y `/signin`, así que **todo lo demás queda protegido** por defecto.

@@ -36,12 +36,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
     lowercase: true,
     trim: true,
-    match: [/^\S+@\S+\.\S+$/, "El email no es válido"],
-    // o usando validator:
-    // validate: {
-    //   validator: (v) => validator.isEmail(v),
-    //   message: "El email no es válido",
-    // },    
+    match: [/^\S+@\S+\.\S+$/, "El email no es válido"],   
   },
   password: {
     type: String,
